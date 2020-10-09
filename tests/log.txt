@@ -1,0 +1,21 @@
+==42106== Memcheck, a memory error detector
+==42106== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==42106== Using Valgrind-3.17.0.GIT and LibVEX; rerun with -h for copyright info
+==42106== Command: ./corewar /Users/gartanis/main_corewar/tests/champion_cor/zork.cor
+==42106== Parent PID: 39773
+==42106== 
+==42106== 
+==42106== HEAP SUMMARY:
+==42106==     in use at exit: 19,212 bytes in 168 blocks
+==42106==   total heap usage: 200 allocs, 32 frees, 30,733 bytes allocated
+==42106== 
+==42106== LEAK SUMMARY:
+==42106==    definitely lost: 0 bytes in 0 blocks
+==42106==    indirectly lost: 0 bytes in 0 blocks
+==42106==      possibly lost: 8,840 bytes in 7 blocks
+==42106==    still reachable: 10,372 bytes in 161 blocks
+==42106==         suppressed: 0 bytes in 0 blocks
+==42106== Rerun with --leak-check=full to see details of leaked memory
+==42106== 
+==42106== For lists of detected and suppressed errors, rerun with: -s
+==42106== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 398 from 10)
