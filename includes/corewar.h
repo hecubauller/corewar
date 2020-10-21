@@ -7,6 +7,7 @@
 # include "op.h"
 # include <ncurses.h>
 # include <curses.h>
+# include <time.h>
 # include <stdio.h> //vi
 # include <unistd.h> //vi
 
@@ -41,20 +42,40 @@
 
 int id_cursors;
 
-/*
-** struct arena
-*/
-
 
 /*
  * Visualizer
  */
 
-# define PLAYERS_NAMES "PAUSE"
-# define ARENA      1
-# define BAR   2
+# define F_P        		1
+# define S_P        		2
+# define T_P        		3
+# define FO_P      			4
+
+# define ARENA      		5
+# define DEFAULT_CURSOR     6
+# define COLOR_BRIGHT_BLACK 8
+
+# define CRWR				10
+# define DEFAULT_TEXT		11
+# define COLOR_PINK			13
+# define COLOR_BRIGHT_WHITE 15
+# define EXIT				16
+
+# define F_P_C       		17
+# define S_P_C        		18
+# define T_P_C        		19
+# define FO_P_C      		20
 
 
+# define MIN_SPEED			1000000
+# define MAX_SPEED			1000
+# define SPEED_BUTTON		115
+# define MAX_SPEED_BTN		109
+
+/*
+** struct arena
+*/
 
 typedef struct      s_op
 {
@@ -80,18 +101,19 @@ typedef struct      s_cursor
     int             step;
     int             reg[REG_NUMBER];
     int             args_type[3];
+    int 			clr;
     t_op            *op;
     struct s_cursor *next;
 }                   t_cursor;
 
 typedef struct      s_player
 {
-    char            name[PROG_NAME_LENGTH + 1];
-    char            comment[COMMENT_LENGTH + 1];
-    uint8_t         instr[CHAMP_MAX_SIZE];
-    int             isntr_size;
-    int             id;
-    int             location;
+    char            name[PROG_NAME_LENGTH + 1]; //name
+    char            comment[COMMENT_LENGTH + 1]; //cmnt
+    uint8_t         instr[CHAMP_MAX_SIZE]; //instructions??
+    int             isntr_size; // size of the player
+    int             id; // id of player
+    int             location; //first byte of instr
     struct s_player *next;
 }                   t_player;
 
@@ -100,6 +122,7 @@ typedef struct      s_vm
     uint8_t         arena[MEM_SIZE];
     t_player        *players[MAX_PLAYERS];
     t_cursor        *cursor;
+    t_cursor		*tmp_cursor;
     t_player        *last_alive;
     int             players_num;
     int             cursors_num;
@@ -112,8 +135,24 @@ typedef struct      s_vm
     int             cycles_to_die;
     int             cycles_to_check;
     t_op            op_tab[17];
+    int             is_init_viz;
+    int 			flag_vs;
+    int 			pause;
+    int 			speed;
+	int 	        color_arena[MEM_SIZE];
 
 }                   t_vm;
+
+typedef struct      s_vs
+{
+    WINDOW          *bar;
+    WINDOW          *arena;
+    WINDOW          *a_frame;
+    int             x;
+    int             y;
+
+}                   t_vs;
+
 
 /*
 ** Initialization functions
@@ -141,7 +180,6 @@ int         parse_id_champ(t_vm *vm, char *av);
 int         is_extension(char *av, char *ext);
 void        update_champion_id(t_vm *vm);
 int         is_number(char *str);
-// int         bytecode_to_int(uint8_t *buffer, int size);
 
 /*
 ** Playing corewar
@@ -159,6 +197,9 @@ int         is_register(int reg_id);
 void        set_int_by_addres(t_vm *vm, int addres, int value, int size);
 int         bytecode_arg_to_int(t_vm *vm, int pc, int size);
 void        check_ctd_and_cursor(t_vm *vm);
+void 		play_cycle(t_vm *vm);
+void		execute_cursors(t_vm *vm);
+int			is_check_cycle(t_vm *vm);
 
 /*
 ** Instruction
@@ -196,7 +237,16 @@ void		ft_exit(t_vm *vm, int code);
  * Visualizer
  */
 
-void viz_main(t_vm *vm);
+void        viz_main(t_vm *vm);
+void        set_frame(t_vs *vs);
+void		init_pairs(void);
+void 		print_intro(t_vs *vs);
+void        print_aren(t_vm *vm, t_vs *vs);
+void        print_bar(t_vm *vm, t_vs *vs);
+void 		print_help(t_vs *vs);
+void		play_visual(t_vm *vm);
+void 		play_cycle(t_vm *vm);
+void 		init_clr_aren(t_vm *vm);
 
 
 #endif

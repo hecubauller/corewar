@@ -22,6 +22,7 @@ void		copy_cursor(t_cursor *dst, t_cursor *src)
 	ft_bzero(dst->args_type, sizeof(int) * 3);
 	dst->op = NULL;
 	dst->step = 0;
+	dst->clr = src->clr;
 }
 
 void		fill_cursor(t_cursor *new, int addres, int id_player)
@@ -62,6 +63,7 @@ void		init_cursor(t_vm *vm)
 	{
 		tmp = push_top_cursor(vm);
 		fill_cursor(tmp, vm->players[i]->location, vm->players[i]->id);
+		tmp->clr = vm->players[i]->id;
 		i++;
 	}
 }
