@@ -6,7 +6,7 @@
 /*   By: zaz <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2020/09/16 15:27:29 by gartanis         ###   ########.fr       */
+/*   Updated: 2020/10/24 13:10:50 by lelida           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@
 # define ERRABC         	(1)
 # define ERRARG         	(2)
 
-int							id_cursors;
+int							g_id_cursors;
 
 /*
 ** Visualizer

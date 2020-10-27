@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_args.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gartanis <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: lelida <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/07 20:07:11 by gartanis          #+#    #+#             */
-/*   Updated: 2020/10/07 20:07:15 by gartanis         ###   ########.fr       */
+/*   Created: 2020/10/24 13:39:27 by lelida            #+#    #+#             */
+/*   Updated: 2020/10/24 13:39:38 by lelida           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,13 @@ void		ft_parse_args(t_vm *vm, char **av)
 		{
 			vm->flag_vs = 1;
 			av += 1;
-			printf("hui");
 		}
 		else if (is_extension(av[0], EXT))
 			parse_filename(vm, &av);
 		else
 			ft_exit(vm, USAGE);
 	}
+	if (!vm->players_num)
+		ft_exit(vm, USAGE);
 	update_champion_id(vm);
 }

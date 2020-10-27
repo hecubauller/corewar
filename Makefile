@@ -3,91 +3,115 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: marvin <marvin@student.42.fr>              +#+  +:+       +#+         #
+#    By: lelida <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2020/03/07 18:06:29 by gartanis          #+#    #+#              #
-#    Updated: 2020/07/17 01:47:04 by marvin           ###   ########.fr        #
+#    Created: 2020/10/22 11:51:10 by lelida            #+#    #+#              #
+#    Updated: 2020/10/22 11:51:22 by lelida           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-TARGET	:= corewar
-CFLAGS 	:= -Wall -Werror -Wextra
-CC 		:= gcc
+# Targets
+ASM				:= asm
+COREWAR			:= corewar
 
-# Source and object direct
+# Gcc and flags
+CC				:= gcc
+FLAGS			:= -Wall -Wextra -Werror
 
-LIBFT	:= ./libft/libft.a
-INC		:= ./includes/
-LFT_DIR := ./libft/
-OBJ_DIR	:= ./obj/
+# Source files 
+ASM_SRCS_FILES		:=	allocation.c file.c free.c\
+ 						instructions.c label.c main.c\
+ 						parse_header.c parser_utils.c parser.c\
+ 						types.c
 
-# Source files
+CORE_SRCS_FILES		:=	check_play.c error.c free.c\
+ 						init_cursor.c init.c main.c\
+ 						move_cursor.c op.c parse_abc.c\
+ 						parse_args.c print.c parse_champion.c \
+ 						parse_flags.c parse_util.c play_corewar.c\
+ 						play_util.c validate_instr.c init_champ.c\
+						print_arena.c print_bar.c\
+						init_vs.c visualizer.c \
+						ft_add.c ft_aff.c ft_and.c \
+						ft_fork.c ft_ld.c ft_ldi.c \
+						ft_lfork.c ft_live.c ft_lld.c\
+						ft_lldi.c ft_or.c ft_st.c \
+						ft_sti.c ft_sub.c ft_xor.c \
+						ft_zjmp.c instr_util.c
 
-FILE 	:= srcs/corewar/check_play.c srcs/corewar/error.c srcs/corewar/free.c\
- 			srcs/corewar/init_cursor.c srcs/corewar/init.c srcs/corewar/main.c\
- 			srcs/corewar/move_cursor.c srcs/corewar/op.c srcs/corewar/parse_abc.c\
- 			srcs/corewar/parse_args.c srcs/corewar/parse_champion.c \
- 			srcs/corewar/parse_flags.c srcs/corewar/parse_util.c srcs/corewar/play_corewar.c\
- 			srcs/corewar/play_util.c srcs/corewar/visualization/visualizer.c \
-			srcs/corewar/print.c srcs/corewar/validate_instr.c srcs/corewar/init_champ.c\
-			srcs/corewar/visualization/print_arena.c srcs/corewar/visualization/print_bar.c\
-			srcs/corewar/visualization/init_vs.c\
+# Headers
+ASM_HEADERS_FILES	:=	op.h asm.h
+CORE_HEADERS_FILES	:=	op.h corewar.h	
 
+# Sources path's
+ASM_PATH		:= srcs/asm/
+CORE_PATH		:= srcs/corewar/
+ASM_SRCS		:= $(addprefix $(ASM_PATH), $(ASM_SRCS_FILES))
+CORE_SRCS		:= $(addprefix $(CORE_PATH), $(CORE_SRCS_FILES))
 
-INSTR	:= srcs/corewar/instruction/ft_add.c srcs/corewar/instruction/ft_aff.c srcs/corewar/instruction/ft_and.c \
-			srcs/corewar/instruction/ft_fork.c srcs/corewar/instruction/ft_ld.c srcs/corewar/instruction/ft_ldi.c \
-			srcs/corewar/instruction/ft_lfork.c srcs/corewar/instruction/ft_live.c srcs/corewar/instruction/ft_lld.c\
-			srcs/corewar/instruction/ft_lldi.c srcs/corewar/instruction/ft_or.c srcs/corewar/instruction/ft_st.c \
-			srcs/corewar/instruction/ft_sti.c srcs/corewar/instruction/ft_sub.c srcs/corewar/instruction/ft_xor.c \
-			srcs/corewar/instruction/ft_zjmp.c srcs/corewar/instruction/instr_util.c
+# Objects
+OBJS_PATH			:= objs/
+ASM_OBJS_PATH		:= objs/asm/
+CORE_OBJS_PATH		:= objs/corewar/
+ASM_OBJS		:= $(addprefix $(ASM_OBJS_PATH), $(ASM_SRCS_FILES:.c=.o))
+CORE_OBJS 		:= $(addprefix $(CORE_OBJS_PATH), $(CORE_SRCS_FILES:.c=.o))
 
-SRCS	+= $(notdir $(FILE))
-SRCS	+= $(notdir $(INSTR))
+# Includes 
+INCLUDES_PATH	:= includes/
+INCLUDES		:= -I $(INCLUDES_PATH)
+ASM_HEADERS		:= $(addprefix $(INCLUDES_PATH), $(ASM_HEADERS_FILES))
+CORE_HEADERS	:= $(addprefix $(INCLUDES_PATH), $(CORE_HEADERS_FILES))
 
-HEADER	:= includes/*.h
+# Library
+LIBFT_PATH		:= libft/
+LIBFT_INCLUDES	:= -I libft/includes
+LIBFT			:= -L $(LIBFT_PATH) -lft -lncurses -lpthread
 
-vpath %.c srcs/corewar/instruction/
-vpath %.c srcs/corewar/
-vpath %.c srcs/corewar/visualization/
-vpath %.h includes/
+# Colors
+RED 		:= \033[31;1m
+GREEN 		:= \033[32;1m
+WHITE		:= \033[39;1m
+DBLUE 		:= \033[34m
+EOC			:= \033[00m
 
-# Object files
-OBJF	:= $(addprefix $(OBJ_DIR), $(SRCS:.c=.o))
+.PHONY: all libft clean fclean re
 
-RED 	:= \033[31;1m
-GREEN 	:= \033[32;1m
-DBLUE 	:= \033[34m
-WHITE	:= \033[39;1m
-EOC		:= \033[00m
+all: libft $(ASM) $(COREWAR)
 
-all: obj $(TARGET)
+libft:
+	@make -C $(LIBFT_PATH)
 
-obj:
-	@mkdir -p $(OBJ_DIR)
-
-$(TARGET): $(LIBFT) $(OBJF)
-	@$(CC) -lncurses $^ -o $@ $(LIBFT)
-	@printf "\n$(GREEN)compiled: $(WHITE)$(TARGET)$(EOC)\n"
-
-$(OBJ_DIR)%.o: %.c $(HEADER) Makefile
+$(ASM_OBJS_PATH)%.o: $(ASM_PATH)%.c $(ASM_HEADERS) $(LIBFT_PATH)libft.a
+	@mkdir $(OBJS_PATH) 2> /dev/null || true
+	@mkdir $(ASM_OBJS_PATH) 2> /dev/null || true
 	@printf "$(DBLUE) - Compiling $< into $@\r$(EOC)"
-	@$(CC) $(CFLAGS) -I $(INC) -I $(LFT_DIR)/includes -c $< -o $@
+	@$(CC) $(FLAGS) $(INCLUDES) $(LIBFT_INCLUDES) -o $@ -c $<
+	
 
-$(LIBFT): FORCE
-	@make -C $(LFT_DIR)
+$(CORE_OBJS_PATH)%.o: $(CORE_PATH)%.c $(CORE_HEADERS) $(LIBFT_PATH)libft.a
+	@mkdir $(OBJS_PATH) 2> /dev/null || true
+	@mkdir $(CORE_OBJS_PATH) 2> /dev/null || true
+	@printf "$(DBLUE) - Compiling $< into $@\r$(EOC)"
+	@$(CC) $(FLAGS) $(INCLUDES) $(LIBFT_INCLUDES) -o $@ -c $<
+
+$(ASM): $(ASM_OBJS)
+	@$(CC) $(FLAGS) $(LIBFT) $(ASM_OBJS) -o $@
+	@printf "\n$(GREEN)compiled: $(WHITE)$(ASM)$(EOC)\n"
+
+$(COREWAR): $(CORE_OBJS)
+	@$(CC) $(FLAGS) $(LIBFT) $(CORE_OBJS) -o $@
+	@printf "\n$(GREEN)compiled: $(WHITE)$(COREWAR)$(EOC)\n"
 
 clean:
-	@rm -rf *.o obj includes/lemin.h.gch
-	@cd libft/ && make clean
-	@echo "$(RED)deleted: $(WHITE)obj files$(EOC)"
+	@make -C $(LIBFT_PATH) clean 
+	@rm -f $(ASM_OBJS) $(CORE_OBJS)
+	@rm -rf $(OBJS_PATH)
+	@echo "$(RED)deleted: $(WHITE)objects files$(EOC)"
 
 fclean: clean
-	@rm -f $(TARGET)
-	@cd libft/ && make fclean
-	@echo "$(RED)deleted: $(WHITE)$(TARGET)$(EOC)"
+	@make -C $(LIBFT_PATH) fclean 
+	@rm -f $(ASM) $(COREWAR)
+	@echo "$(RED)deleted: $(WHITE)$(ASM)$(EOC)"
+	@echo "$(RED)deleted: $(WHITE)$(COREWAR)$(EOC)"
 
 re: fclean all
-
-FORCE:
-
-.PHONY: clean fclean re all
